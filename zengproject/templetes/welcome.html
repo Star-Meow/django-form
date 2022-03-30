@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+{% load static %}
+
+
+<head>
+
+    <meta charset=' utf-8 '>
+    <title>
+        網頁開發設計2B
+    </title>
+
+    <link href="{% static 'css/style.css ' %}" rel="stylesheet" type=" text/css " />
+</head>
+
+
+<body style="background-color: white;">
+    <div style="text-align: center;" , id="home">
+        <h1 style="text-align: center;">現在時間:<span style="color:rgb(255, 0, 0);">{{now}}</span></h1>
+        <h2 style="text-align: center;">您的學號為:<span style="color:rgb(255, 81, 0);">{{Uname_ID}}</span></h2>
+        <h2 style="text-align: center;"><img src="{% static '/image/okayusmile.png ' %}" width="32" height="32" />{{Uname}} 先生/小姐,歡迎光臨!</h2>
+        <h1><img src="{% static 'image/okayunice.png '%}" width="48" height="48" />今日推薦菜單</h1>
+        <h1>今日共有{{Uname_IDL}}道菜</h1>
+        <table style="text-align: center;">
+            {% for food in menu %} {% if Uname_IDL >= forloop.counter %}
+            <td>
+                <tr>
+                    <li>==第{{forloop.counter}}份菜單==</li>
+                    <li>菜單:{{food.name}}</li>
+                    <li>價格:{{food.price}}</li>
+                    <li>評價:{{food.comment}}</li>
+                    <li>是否含辣:{% if food.is_spicy %} 辣 {% else %} 不辣 {% endif %}</li>
+                </tr>
+                <tr><img src="{% static 'image/' %}{{food.type}}" , width="48" height="48" /></tr>
+
+            </td>
+
+            {% else %} {% endif %} {% endfor %}
+        </table>
+    </div>
+</body>
+
+</html>
