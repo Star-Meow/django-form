@@ -1,8 +1,9 @@
+from plistlib import UID
 from django.shortcuts import render
 
 # Create your views here.
 
-from django.shortcuts import render
+from myapp.models import student
 from datetime import datetime
 from django.http import HttpResponse
 # Create your views here.
@@ -41,6 +42,32 @@ def welcome(request, username):
     else:
         return render(request, "space.html", locals())
 
+def form(request):  
+    if request.method == "POST":  
+        Cname = request.POST['Uname']
+        Cuid =  request.POST['UID']
+        Cpassword = request.POST['Password']
+        CSex = request.POST['Sex']
+        Cagree = request.POST['agree']
+        Ccode = request.POST['code']
 
-def space(request):
-    return render(request, "space.html", locals())
+    else:
+        message = '請輸入資料(資料不作驗證)'
+    return render(request, "fill.html", locals())
+
+'''
+含有以下Form元件：
+
+1. text (姓名/ID)v
+
+2. radio (性別) v
+
+3. checkbox (興趣)
+
+4. submit v
+
+5. Reset v
+
+6. password (10碼)v
+
+'''

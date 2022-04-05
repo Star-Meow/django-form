@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h2>HTML Forms</h2>
+
+    <form action="/form/" method="POST">
+        {% csrf_token %} User Name:<br>
+        <input type="text" id="Uname" name="Uname" value="Star">
+        <label for="html"><br> User ID:<br></label>
+        <input type="text" id="UID" name="UID" value="109021071">
+
+        <label for="html"><br> Password:<br></label>
+        <input type="password" id="Password" name="Password" value="elden lord" maxlength="10">
+
+
+        <label for="html"><br> Sex:<br></label>
+
+        <input type="radio" id="Male" name="Sex" value="Male" checked>
+        <label for="html">Male<br></label>
+        <input type="radio" id="Fmale" name="Sex" value="Fmale">
+        <label for="html">Fmale<br></label>
+        <input type="radio" id="Other" name="Sex" value="Other">
+        <label for="html">Other<br><br></label>
+
+        <input type="checkbox" id="code" name="code" value="Code">
+        <label for="vehicle1"> 寫Code</label><br>
+        <input type="checkbox" id="card" name="card" value="Card">
+        <label for="vehicle2"> 玩桌遊</label><br>
+        <input type="checkbox" id="playPC" name="playPC" value="PlayPC">
+        <label for="vehicle3"> 玩電腦</label><br><br>
+
+
+
+        <input type="checkbox" id="agree" name="agree" value="agree" checked> Agree to User Specifications<br>
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">點此查看使用者規範<a>
+    <br><br>
+    <input type="submit" value="Submit">
+    <input type="reset" value="Reset">
+        接收到的資料:
+        {{Cname}}
+        {{Cuid}}
+        {{Cpassword}}
+        {{CSex}}
+        {{Cagree}}
+        {{Ccode}}
+        
+
+</form> 
+
+
+
+</body>
+</html>

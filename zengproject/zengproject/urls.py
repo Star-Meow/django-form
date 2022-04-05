@@ -15,11 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from myapp.views import callusername, welcome, space
+from myapp.views import callusername, welcome,form
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/<str:username>', callusername),
     path('welcome/<str:username>', welcome),
-    path('',space),
+    path('form/',form),
 ]
