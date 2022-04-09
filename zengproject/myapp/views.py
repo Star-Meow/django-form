@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from myapp.models import student
+from myapp.models import student2
 from datetime import datetime
 from django.http import HttpResponse
 # Create your views here.
@@ -55,19 +55,5 @@ def form(request):
         message = '請輸入資料(資料不作驗證)'
     return render(request, "fill.html", locals())
 
-'''
-含有以下Form元件：
 
-1. text (姓名/ID)v
 
-2. radio (性別) v
-
-3. checkbox (興趣)
-
-4. submit v
-
-5. Reset v
-
-6. password (10碼)v
-
-'''
