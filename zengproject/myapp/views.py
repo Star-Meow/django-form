@@ -1,5 +1,6 @@
-from plistlib import UID
-from django.shortcuts import render
+from myapp.forms import PostForm
+from email import message
+from django.shortcuts import render,redirect
 
 # Create your views here.
 
@@ -42,6 +43,23 @@ def welcome(request, username):
     else:
         return render(request, "space.html", locals())
 
+def index(request):  
+    students = student2.objects.all().order_by('id')  #讀取資料表, 依 id 遞增排序
+    return render(request, "index.html", locals())	
+
+def delete(request,id=None):  #刪除資料
+	if id!=None:
+		if request.method == "POST":  #如果是以POST方式才處理
+			id=request.POST['cId'] #取得表單輸入的編號
+		try:
+			unit = student2.objects.get(id=id)
+			unit.delete()
+			return redirect('/index/')
+		except:
+			message = "讀取錯誤!"			
+	return render(request, "delete.html", locals())	
+
+
 def form(request):  
     if request.method == "POST":  
         Cname = request.POST['Uname']
@@ -56,4 +74,46 @@ def form(request):
     return render(request, "fill.html", locals())
 
 
+def dtform(request):  
+    if request.method == "POST":	 
+        cName = request.POST['cName'] 
+        cSex =  request.POST['cSex']
+        cUID = request.POST['UID']
+        cBirthday =  request.POST['cBirthday']
+        cEmail = request.POST['cEmail']
+        cPhone =  request.POST['cPhone']
+        cAddr =  request.POST['cAddr']
+        #新增一筆記錄
+        unit = student2.objects.create(cName=cName, cSex=cSex,cUID=cUID, cBirthday=cBirthday, cEmail=cEmail,cPhone=cPhone, cAddr=cAddr) 
+        unit.save()  #寫入資料庫
+        return redirect('/index/')
+    else:
+        message = 'stop'
+    return render(request, "dtform.html", locals())	
 
+
+def edit(request,id=None,mode=None):
+    if mode == "load":  # 由 index.html 按 編輯二 鈕
+        unit = student2.objects.get(id=id)  #取得要修改的資料記
+        strdate=str(unit.cBirthday)
+        strdate2=strdate.replace("年","-")
+        strdate2=strdate.replace("月","-")
+        strdate2=strdate.replace("日","-")
+        unit.cBirthday = strdate2		
+        return render(request, "edit.html", locals())
+    elif mode == "edit": # 由 edit2.html 按 submit		
+        unit = student2.objects.get(id=id)  #取得要修改的資料記錄	
+        unit.cName=request.POST['cName']
+        unit.cSex=request.POST['cSex']
+        unit.cUID = request.POST['UID']
+        unit.cBirthday=request.POST['cBirthday']
+        unit.cEmail=request.POST['cEmail']
+        unit.cPhone=request.POST['cPhone']
+        unit.cAddr=request.POST['cAddr']		
+        unit.save()  #寫入資料庫
+        message = '已修改...'
+    return redirect('/index/')
+
+
+def postform(request):
+    postform = PostForm()

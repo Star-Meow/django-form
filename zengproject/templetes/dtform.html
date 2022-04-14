@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% block title %}
+<title>資料表</title>{% endblock %} {% block content %}
+<h2>資料表</h2>
+<form action="." method="POST" name="form1">
+    {% csrf_token %}
+    <table border="1" cellpadding="5" cellspacing="1">
+        <tr>
+            <th>姓名</th>
+            <td><input type="text" id="cName" name="cName" value="" /></td>
+        </tr>
+        <tr>
+            <th>性別</th>
+            <td>
+                <input name="cSex" type="radio" id="cSex1" value="M" checked="checked" /> 男生
+                <input name="cSex" type="radio" id="cSex2" value="F" /> 女生
+            </td>
+        </tr>
+        <tr>
+            <th>User ID:</th>
+            <td>
+                <input type="text" id="UID" name="UID" value="">
+            </td>
+        </tr>
+        <tr>
+            <th>生日</th>
+            <td><input type="text" id="cBirthday" name="cBirthday" value="" /></td>
+        </tr>
+        <tr>
+            <th>郵件帳號</th>
+            <td><input type="text" id="cEmail" name="cEmail" value="123@gmail.com" /></td>
+        </tr>
+        <tr>
+            <th>電話</th>
+            <td><input type="text" id="cPhone" name="cPhone" value="" /></td>
+        </tr>
+        <tr>
+            <th>地址</th>
+            <td><input type="text" id="cAddr" name="cAddr" value="" /></td>
+        </tr>
+        <tr>
+            <th colspan="2 " align="center ">
+                <input type="submit" value="Submit">
+                <input type="reset" value="Reset"></th>
+        </tr>
+    </table>
+    <span style="color:red ">{{message}}</span>
+</form>
+{% endblock %}

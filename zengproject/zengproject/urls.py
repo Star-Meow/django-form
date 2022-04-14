@@ -15,11 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from myapp.views import callusername, welcome,form
+from myapp.views import callusername, welcome, form, dtform, index, delete, edit, postform
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/<str:username>', callusername),
     path('welcome/<str:username>', welcome),
     path('form/',form),
+    path('index/',index),
+    path('dtform/',dtform),
+
+    path('edit/<int:id>/',edit),
+    path('edit/<int:id>/<str:mode>', edit),
+
+    path('delete/<int:id>/',delete),
+    path('postform/', postform),
 ]
