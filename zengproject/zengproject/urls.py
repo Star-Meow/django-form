@@ -15,19 +15,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from myapp.views import callusername, welcome, form, dtform, index, delete, edit, postform
-
+from myapp import views
+'''
+    path('welcome/<str:username>', views.welcome),
+    path('form/',views.form),
+    path('index/',views.index),
+    path('dtform/',views.dtform),
+    path('edit/<int:id>/',views.edit),
+    path('edit/<int:id>/<str:mode>', views.edit),
+    path('delete/<int:id>/',views.delete),
+    path('postform/', views.postform),
+'''
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/<str:username>', callusername),
-    path('welcome/<str:username>', welcome),
-    path('form/',form),
-    path('index/',index),
-    path('dtform/',dtform),
+	path('', views.time_cookie),
+	path('index/', views.time_cookie),
 
-    path('edit/<int:id>/',edit),
-    path('edit/<int:id>/<str:mode>', edit),
-
-    path('delete/<int:id>/',delete),
-    path('postform/', postform),
+    path('delete_cookie/<str:key>/', views.delete_cookie),
+    path('set_cookie/<str:key>/<str:value>/', views.set_cookie),
+    path('set_cookie2/<str:key>/<str:value>/', views.set_cookie2),
+    path('get_cookie/<str:key>/', views.get_cookie),
+	path('allcookie/', views.get_allcookie),
 ]

@@ -1,3 +1,4 @@
+from urllib import response
 from myapp.forms import PostForm
 from email import message
 from django.shortcuts import render,redirect
@@ -8,12 +9,10 @@ from myapp.models import student2
 from datetime import datetime
 from django.http import HttpResponse
 # Create your views here.
-
-def basic(request):
-    return render(request, "space.html")
-
-def callusername(request, username):
-    return HttpResponse("Hello, "+  username)
+'''
+def is_valid(self):
+    """Return True if the form has no errors, or False otherwise."""
+    return self.is_bound and not self.errors
 
 def welcome(request, username):
     if len(username) >= 10:
@@ -59,7 +58,6 @@ def delete(request,id=None):  #刪除資料
 			message = "讀取錯誤!"			
 	return render(request, "delete.html", locals())	
 
-
 def form(request):  
     if request.method == "POST":  
         Cname = request.POST['Uname']
@@ -72,7 +70,6 @@ def form(request):
     else:
         message = '請輸入資料(資料不作驗證)'
     return render(request, "fill.html", locals())
-
 
 def dtform(request):  
     if request.method == "POST":	 
@@ -91,18 +88,17 @@ def dtform(request):
         message = 'stop'
     return render(request, "dtform.html", locals())	
 
-
 def edit(request,id=None,mode=None):
-    if mode == "load":  # 由 index.html 按 編輯二 鈕
-        unit = student2.objects.get(id=id)  #取得要修改的資料記
+    if mode == "load":  
+        unit = student2.objects.get(id=id)  
         strdate=str(unit.cBirthday)
         strdate2=strdate.replace("年","-")
         strdate2=strdate.replace("月","-")
         strdate2=strdate.replace("日","-")
         unit.cBirthday = strdate2		
         return render(request, "edit.html", locals())
-    elif mode == "edit": # 由 edit2.html 按 submit		
-        unit = student2.objects.get(id=id)  #取得要修改的資料記錄	
+    elif mode == "edit":			
+        unit = student2.objects.get(id=id)  	
         unit.cName=request.POST['cName']
         unit.cSex=request.POST['cSex']
         unit.cUID = request.POST['UID']
@@ -114,6 +110,50 @@ def edit(request,id=None,mode=None):
         message = '已修改...'
     return redirect('/index/')
 
-
 def postform(request):
     postform = PostForm()
+    return render(request, "postform.html", locals())
+'''
+def set_cookie(request,key=None,value=None):
+    response = HttpResponse('Cookie儲存完畢')
+    response.set_cookie(key,value)
+    return response
+
+def set_cookie2(request,key=None,value=None):
+	response = HttpResponse('Cookie 有效時間1小時!')
+	response.set_cookie(key,value,max_age=3600)
+	return response	
+
+def get_cookie(request,key=None):
+	if key in request.COOKIES:
+		return HttpResponse('%s : %s' %(key,request.COOKIES[key]))
+	else:
+		return HttpResponse('Cookie 不存在!')	
+
+def get_allcookie(request):
+    if request.COOKIES!= None:
+        strcookie = ''
+        for key1 , value1 in request.COOKIES.items():
+            strcookie = strcookie + key1 + ":" + value1 + "<br>"
+        return HttpResponse('%s' %(strcookie))
+    else:
+        return HttpResponse('cookie 不存在')
+    
+def delete_cookie(request,key=None):
+	if key in request.COOKIES:
+		response = HttpResponse('Delete Cookie: '+key)	
+		response.delete_cookie(key)
+		return response
+
+def time_cookie(request):
+	if "counter" in request.COOKIES:
+		counter=int(request.COOKIES["counter"])
+		counter+=1
+	else:		
+		counter=1
+	response = HttpResponse('今日瀏覽次數：' + str(counter))		
+	tomorrow = datetime.datetime.now() + datetime.timedelta(days = 1)
+	tomorrow = datetime.datetime.replace(tomorrow, hour=0, minute=0, second=0)
+	expires = datetime.datetime.strftime(tomorrow, "%a, %d-%b-%Y %H:%M:%S GMT") 
+	response.set_cookie("counter",counter,expires=expires)
+	return response	
