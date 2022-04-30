@@ -18,6 +18,30 @@ from django.urls import path
 from myapp import views
 '''
     path('welcome/<str:username>', views.welcome),
+
+
+    	path('', views.time_cookie),
+	path('index/', views.time_cookie),
+
+    path('delete_cookie/<str:key>/', views.delete_cookie),
+    path('set_cookie/<str:key>/<str:value>/', views.set_cookie),
+    path('set_cookie2/<str:key>/<str:value>/', views.set_cookie2),
+    path('get_cookie/<str:key>/', views.get_cookie),
+	path('get_allcookie/', views.get_allcookie),
+
+	path('set_session/<str:key>/<str:value>/', views.set_session),
+	path('set_session2/<str:key>/<str:value>/', views.set_session2),
+	path('get_session/<str:key>/', views.get_session),
+	path('get_allsession/', views.get_allsession),
+	path('delete_session/<str:key>/', views.delete_session),
+    path('kill_allsession/', views.kill_allsession),
+
+	path('login/', views.login),	
+	path('logout/', views.logout),	
+    path('login/register/', views.register)
+'''
+urlpatterns = [
+    path('admin/', admin.site.urls),
     path('form/',views.form),
     path('index/',views.index),
     path('dtform/',views.dtform),
@@ -25,15 +49,6 @@ from myapp import views
     path('edit/<int:id>/<str:mode>', views.edit),
     path('delete/<int:id>/',views.delete),
     path('postform/', views.postform),
-'''
-urlpatterns = [
-    path('admin/', admin.site.urls),
-	path('', views.time_cookie),
-	path('index/', views.time_cookie),
+    path('delete2/<str:name>/',views.delete2),
 
-    path('delete_cookie/<str:key>/', views.delete_cookie),
-    path('set_cookie/<str:key>/<str:value>/', views.set_cookie),
-    path('set_cookie2/<str:key>/<str:value>/', views.set_cookie2),
-    path('get_cookie/<str:key>/', views.get_cookie),
-	path('allcookie/', views.get_allcookie),
 ]

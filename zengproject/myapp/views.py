@@ -1,15 +1,13 @@
-from urllib import response
+from django.shortcuts import render,redirect
 from myapp.forms import PostForm
 from email import message
-from django.shortcuts import render,redirect
 
-# Create your views here.
 
 from myapp.models import student2
 from datetime import datetime
 from django.http import HttpResponse
 # Create your views here.
-'''
+
 def is_valid(self):
     """Return True if the form has no errors, or False otherwise."""
     return self.is_bound and not self.errors
@@ -58,6 +56,18 @@ def delete(request,id=None):  #刪除資料
 			message = "讀取錯誤!"			
 	return render(request, "delete.html", locals())	
 
+def delete2(request,name=None):  #刪除資料
+	if name !=None:
+		if request.method == "POST":  #如果是以POST方式才處理
+			name =request.POST['cName'] #取得表單輸入的編號
+		try:
+			unit = student2.objects.get(cName = name)
+			unit.delete()
+			return redirect('/index/')
+		except:
+			message = "讀取錯誤!"			
+	return render(request, "delete.html", locals())	
+
 def form(request):  
     if request.method == "POST":  
         Cname = request.POST['Uname']
@@ -72,20 +82,23 @@ def form(request):
     return render(request, "fill.html", locals())
 
 def dtform(request):  
-    if request.method == "POST":	 
-        cName = request.POST['cName'] 
-        cSex =  request.POST['cSex']
-        cUID = request.POST['UID']
-        cBirthday =  request.POST['cBirthday']
-        cEmail = request.POST['cEmail']
-        cPhone =  request.POST['cPhone']
-        cAddr =  request.POST['cAddr']
-        #新增一筆記錄
-        unit = student2.objects.create(cName=cName, cSex=cSex,cUID=cUID, cBirthday=cBirthday, cEmail=cEmail,cPhone=cPhone, cAddr=cAddr) 
-        unit.save()  #寫入資料庫
-        return redirect('/index/')
+    if request.method == "POST":	
+        postform = PostForm(request.POST) 
+        if postform.is_valid():	
+            cName = postform.cleaned_data['cName'] 
+            cSex =  postform.cleaned_data['cSex']
+            cUID = postform.cleaned_data['cUID']
+            cBirthday =  postform.cleaned_data['cBirthday']
+            cEmail = postform.cleaned_data['cEmail']
+            cPhone =  postform.cleaned_data['cPhone']
+            cAddr =  postform.cleaned_data['cAddr']
+            #新增一筆記錄
+            unit = student2.objects.create(cName=cName, cSex=cSex,cUID=cUID, cBirthday=cBirthday, cEmail=cEmail,cPhone=cPhone, cAddr=cAddr) 
+            unit.save()  #寫入資料庫
+            return redirect('/index/')
     else:
         message = 'stop'
+        postform = PostForm()
     return render(request, "dtform.html", locals())	
 
 def edit(request,id=None,mode=None):
@@ -152,8 +165,76 @@ def time_cookie(request):
 	else:		
 		counter=1
 	response = HttpResponse('今日瀏覽次數：' + str(counter))		
-	tomorrow = datetime.datetime.now() + datetime.timedelta(days = 1)
-	tomorrow = datetime.datetime.replace(tomorrow, hour=0, minute=0, second=0)
-	expires = datetime.datetime.strftime(tomorrow, "%a, %d-%b-%Y %H:%M:%S GMT") 
+	tomorrow = datetime.now() + datetime.timedelta(days = 1)
+	tomorrow = datetime.replace(tomorrow, hour=0, minute=0, second=0)
+	expires = datetime.strftime(tomorrow, "%a, %d-%b-%Y %H:%M:%S GMT") 
 	response.set_cookie("counter",counter,expires=expires)
 	return response	
+
+def set_session(request,key=None,value=None):
+	response = HttpResponse('Session 儲存完畢!')
+	request.session[key]=value
+	return response
+
+def set_session2(request,key=None,value=None):
+	response = HttpResponse('Session 儲存完畢!')
+	request.session[key]=value
+	request.session.set_expiry(30) # 設持續的時間為30秒
+	return response
+
+def get_session(request,key=None):
+	if key in request.session:
+		return HttpResponse('%s : %s' %(key,request.session[key]))
+	else:
+		return HttpResponse('Session 不存在!')
+
+def get_allsession(request):
+	if request.session!=None:
+		strsessions=""
+		for key1,value1 in request.session.items():
+			strsessions= strsessions + key1 + ":" + str(value1) + "<br>"
+		return HttpResponse(strsessions)
+	else:
+		return 	
+
+def delete_session(request,key=None):
+	if key in request.session:
+		response = HttpResponse('Delete Session: '+key)	
+		del request.session[key]#刪除某一 Session
+		return response
+	else:
+		return HttpResponse('No Session:' + key)
+
+def kill_allsession(request):
+    request.session.clear()
+    return HttpResponse('Session 已清空')
+
+def login(request):
+	#預設帳號密碼
+    username = "star"
+    password = "109021071"
+    if request.method == 'POST':
+        if not 'username' in request.session:
+            if request.POST['username']==username and request.POST['password']==password:
+                request.session['username']=username #儲存Session
+                message=username + " 您好，登入成功！"
+                status="login"
+    else:
+        if 'username' in request.session:
+            if request.session['username']==username:
+                message=request.session['username'] + " 您已登入過了！"
+                status="login"			
+    return render(request, 'login.html',locals())
+	
+def logout(request):
+	if 'username' in request.session:
+		message=request.session['username'] + ' 您已登出!'
+		del request.session['username']	#刪除Session	
+	return render(request, 'login.html',locals())
+
+def register(request,key=None,value=None):
+    if request.method == "POST":
+        request.session[key] = request.POST['password'] 
+        password = request.POST['username']  
+    return render(request, 'register.html',locals())
+'''
